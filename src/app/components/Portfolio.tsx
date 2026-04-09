@@ -1,41 +1,47 @@
 import { motion } from "motion/react";
-import { ExternalLink, Smartphone, Monitor } from "lucide-react";
+import { ExternalLink, Play } from "lucide-react";
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
+import { useState } from "react";
 
 const projects = [
   {
     id: "1",
     title: "E-Commerce Boutique Fashion",
     description: "Tienda online completa con carrito de compras, pagos y gestión de inventario.",
-    image: "https://images.unsplash.com/photo-1772037441147-5301691c4b57?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjB3ZWJzaXRlJTIwZGVzaWduJTIwbW9ja3VwfGVufDF8fHx8MTc3NTY3MDM5OXww&ixlib=rb-4.1.0&q=80&w=1080",
+    videoId: "gISdisOusZQ",
     tags: ["E-commerce", "Responsive", "SEO"],
-    link: "#"
   },
   {
     id: "2",
-    title: "Landing Page Restaurante",
-    description: "Página moderna con menú digital, reservaciones online y galería de platillos.",
-    image: "https://images.unsplash.com/photo-1772037441147-5301691c4b57?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjB3ZWJzaXRlJTIwZGVzaWduJTIwbW9ja3VwfGVufDF8fHx8MTc3NTY3MDM5OXww&ixlib=rb-4.1.0&q=80&w=1080",
-    tags: ["Landing Page", "Mobile First"],
-    link: "#"
+    title: "Portfolio Fotógrafo Profesional",
+    description: "Galería elegante con categorías, lightbox y formulario de contacto integrado.",
+    videoId: "7cSyeVz_jr4",
+    tags: ["Portfolio", "Galería", "Minimalista"],
   },
   {
     id: "3",
-    title: "Portfolio Fotógrafo Profesional",
-    description: "Galería elegante con categorías, lightbox y formulario de contacto integrado.",
-    image: "https://images.unsplash.com/photo-1772037441147-5301691c4b57?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjB3ZWJzaXRlJTIwZGVzaWduJTIwbW9ja3VwfGVufDF8fHx8MTc3NTY3MDM5OXww&ixlib=rb-4.1.0&q=80&w=1080",
-    tags: ["Portfolio", "Galería", "Minimalista"],
-    link: "#"
-  }
+    title: "Landing Page Restaurante",
+    description: "Página moderna con menú digital, reservaciones online y galería de platillos.",
+    videoId: "yjeAGoTTXI8",
+    tags: ["Landing Page", "Mobile First"],
+  },
+  {
+    id: "4",
+    title: "Sistema de Gestión de Clientes",
+    description: "Sistema completo para gestión de honorarios, clientes y seguimiento de pagos.",
+    videoId: "QQJMZw7CRU4",
+    tags: ["Sistema Web", "Gestión", "Dashboard"],
+  },
 ];
 
 export function Portfolio() {
+  const [playingId, setPlayingId] = useState<string | null>(null);
+
   return (
     <section className="py-24 bg-slate-950 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute top-1/4 left-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
-      
+      <div className="absolute top-1/4 left-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -51,11 +57,11 @@ export function Portfolio() {
             Proyectos Destacados
           </h2>
           <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-            Páginas web que generan resultados. Mira algunos de nuestros trabajos recientes.
+            Páginas web que generan resultados. Mira algunos de nuestros trabajos en video.
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {projects.map((project, index) => (
             <motion.div
               key={project.id}
@@ -65,36 +71,55 @@ export function Portfolio() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               <Card className="bg-slate-900/50 border-slate-800 overflow-hidden hover:border-purple-500/50 transition-all duration-300 group h-full flex flex-col">
-                <div className="relative aspect-video overflow-hidden">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  
-                  {/* Overlay on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
-                    <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                      <div className="flex gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-purple-600 flex items-center justify-center hover:bg-purple-700 transition-colors cursor-pointer">
-                          <Monitor className="w-5 h-5 text-white" />
-                        </div>
-                        <div className="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center hover:bg-blue-700 transition-colors cursor-pointer">
-                          <Smartphone className="w-5 h-5 text-white" />
-                        </div>
+                {/* Video area */}
+                <div className="relative aspect-video overflow-hidden bg-slate-800">
+                  {playingId === project.id ? (
+                    <iframe
+                      className="w-full h-full"
+                      src={`https://www.youtube.com/embed/${project.videoId}?autoplay=1&rel=0`}
+                      title={project.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  ) : (
+                    <>
+                      {/* YouTube thumbnail */}
+                      <img
+                        src={`https://img.youtube.com/vi/${project.videoId}/maxresdefault.jpg`}
+                        alt={project.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      {/* Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent opacity-60 group-hover:opacity-75 transition-opacity"></div>
+                      {/* Play button */}
+                      <button
+                        onClick={() => setPlayingId(project.id)}
+                        className="absolute inset-0 flex items-center justify-center"
+                      >
+                        <motion.div
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="w-16 h-16 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center shadow-lg shadow-purple-500/40"
+                        >
+                          <Play className="w-7 h-7 text-white ml-1" fill="white" />
+                        </motion.div>
+                      </button>
+                      {/* YouTube badge */}
+                      <div className="absolute top-3 right-3 px-2 py-1 bg-red-600/90 backdrop-blur-sm rounded text-white text-xs font-medium flex items-center gap-1">
+                        ▶ YouTube
                       </div>
-                    </div>
-                  </div>
+                    </>
+                  )}
                 </div>
-                
+
                 <div className="p-6 flex-1 flex flex-col">
                   <h3 className="text-xl font-semibold text-slate-100 mb-2 group-hover:text-purple-400 transition-colors">
                     {project.title}
                   </h3>
-                  <p className="text-slate-400 mb-4 flex-1">
+                  <p className="text-slate-400 mb-4 flex-1 text-sm leading-relaxed">
                     {project.description}
                   </p>
-                  
+
                   <div className="flex flex-wrap gap-2 mb-4">
                     {project.tags.map((tag) => (
                       <span
@@ -105,14 +130,27 @@ export function Portfolio() {
                       </span>
                     ))}
                   </div>
-                  
-                  <Button
-                    variant="outline"
-                    className="w-full border-purple-500/50 text-purple-400 hover:bg-purple-500/10 group-hover:border-purple-500 transition-all"
-                  >
-                    <ExternalLink className="w-4 h-4 mr-2" />
-                    Ver Proyecto
-                  </Button>
+
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      className="flex-1 border-purple-500/50 text-purple-400 hover:bg-purple-500/10 group-hover:border-purple-500 transition-all text-sm"
+                      onClick={() => setPlayingId(project.id)}
+                    >
+                      <Play className="w-4 h-4 mr-2" />
+                      Ver Video
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="border-slate-700 text-slate-400 hover:border-purple-500/50 hover:text-purple-400"
+                      onClick={() =>
+                        window.open(`https://youtu.be/${project.videoId}`, "_blank")
+                      }
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </div>
               </Card>
             </motion.div>
@@ -130,7 +168,12 @@ export function Portfolio() {
           <Button
             size="lg"
             className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg shadow-purple-500/30"
-            onClick={() => window.open('https://wa.me/5218715567420', '_blank')}
+            onClick={() =>
+              window.open(
+                "https://wa.me/528715567420?text=Hola%21%20Quiero%20una%20p%C3%A1gina%20web",
+                "_blank"
+              )
+            }
           >
             Solicita una Cotización
           </Button>
